@@ -285,13 +285,13 @@ namespace olca_plot_car {
         /* 端数の計算計算  */
 
         let kyori_hasuu = kyori % 1;
-        serial.writeValue("kyori_hasuu", kyori_hasuu);
+        /*serial.writeValue("kyori_hasuu", kyori_hasuu);*/
         let kyori_seisuu = Math.floor(kyori);
         /*    serial.writeValue("kyori_seisuu", kyori_seisuu);*/
 
 
         /* forward回の動作との比較と処理  */
-        serial.writeValue("1Tugi_L", Tugi_L);
+        /*serial.writeValue("1Tugi_L", Tugi_L);*/
         if (PremotionR == R_zengo) {
             Tugi_R = Tugi_R + 1;
         }
@@ -455,7 +455,7 @@ namespace olca_plot_car {
         let Step_number = Math.floor(kyori_hasuu * 10 / 2.5);
         let Data1 = 0;
         while (Data1 < Step_number) {
-            serial.writeValue("Data1", Data1);
+            /*serial.writeValue("Data1", Data1);*/
             pins.digitalWritePin(DigitalPin.P3, Stepping_R[Data1][0]);
             pins.digitalWritePin(DigitalPin.P13, Stepping_L[Data1][0]);
             pins.digitalWritePin(DigitalPin.P4, Stepping_R[Data1][1]);
