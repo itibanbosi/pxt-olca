@@ -152,7 +152,7 @@ let font_L = [
     [0, 0, 1, 0, 0],
 ];
 
-
+let moving = 1;
 
 
 //LED不使用
