@@ -1,4 +1,4 @@
-loops.everyInterval(10, function () {
+basic.forever(function () {
     let moving = 0
     serial.writeLine("" + (moving))
     if (moving == 0) {
