@@ -194,7 +194,7 @@ else {
 //% color="#3943c6" block="Olca Ver1.0" weight=95 icon="\uf1b9"
 namespace olca_plot_car {
 
-    let moving = 1;
+
 
     export enum pen_updown {
         //% block="down"
