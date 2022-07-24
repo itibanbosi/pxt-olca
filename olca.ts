@@ -551,7 +551,11 @@ namespace olca_plot_car {
         }
     }
 
-
+    //% color="#3943c6" weight=70 blockId=renzoku
+    //% block="moving" group="2 Basic control"
+    export function renzoku() : void {
+        olca_plot_car.plot_zengo(olca_plot_car.plotter_houkou.forward, 1)
+    }
 
     //% color="#009A00" weight=40 blockId=polygon
     //% block="Run |%RorL|,|%digree_step|sides polygon,|%Edge_Num| cm length" group="3 shapes"
