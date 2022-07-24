@@ -152,7 +152,7 @@ let font_L = [
     [0, 0, 1, 0, 0],
 ];
 
-let moving = 1;
+
 
 
 //LED不使用
@@ -194,7 +194,7 @@ else {
 //% color="#3943c6" block="Olca Ver1.0" weight=95 icon="\uf1b9"
 namespace olca_plot_car {
 
-
+    let moving = 1;
 
     export enum pen_updown {
         //% block="down"
