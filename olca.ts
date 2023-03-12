@@ -582,18 +582,9 @@ namespace olca {
     }
 
     //% color="#6041f1"  weight=33 block="only right |%wb| stepping on  |%sikii| " group="7 photoreflector"
-    //% sence.min=10 sence.max=40
+    //% sikii.min=10 sikii.max=90 sikii.defl=50
     //% advanced=true
-    export function photo_R_out(wb: whiteblack, sikii: sence_select): boolean {
-        if (sikii == sence_select.Low_sensitivity) {
-            sikii = 60;
-        }
-        if (sikii == sence_select.normal30) {
-            sikii = 50;
-        }
-        if (sikii == sence_select.High_sensitivity) {
-            sikii = 40;
-        }
+    export function photo_R_out(wb: whiteblack, sikii: number): boolean {
         if (phto_R() <= sikii) {
             io_neo.setPixelColor(1, neopixel.colors(NeoPixelColors.Green))
         } else {
@@ -624,17 +615,9 @@ namespace olca {
     }
 
     //% color="#6041f1"  weight=34 block="onle left |%wb| stepping on threshold |%sikii| " group="7 photoreflector" 
+    //% sikii.min=10 sikii.max=90 sikii.defl=50
     //% advanced=true
-    export function photo_L_out(wb: whiteblack, sikii: sence_select): boolean {
-        if (sikii == sence_select.Low_sensitivity) {
-            sikii = 60;
-        }
-        if (sikii == sence_select.normal30) {
-            sikii = 50;
-        }
-        if (sikii == sence_select.High_sensitivity) {
-            sikii = 40;
-        }
+    export function photo_L_out(wb: whiteblack, sikii: number): boolean {
         if (phto_R() <= sikii) {
             io_neo.setPixelColor(1, neopixel.colors(NeoPixelColors.Green))
         } else {
@@ -665,18 +648,10 @@ namespace olca {
                 break;
         }
     }
-    //% color="#6041f1"  weight=35 block="Both |%wb| stepping on threshold threshold |%sikii| " group="7 photoreflector"
+    //% color="#6041f1"  weight=35 block="Both |%wb| stepping on threshold |%sikii| " group="7 photoreflector"
+    //% sikii.min=10 sikii.max=90 sikii.defl=50
     //% advanced=true
-    export function photo_LR_out(wb: whiteblack, sikii: sence_select): boolean {
-        if (sikii == sence_select.Low_sensitivity) {
-            sikii = 60;
-        }
-        if (sikii == sence_select.normal30) {
-            sikii = 50;
-        }
-        if (sikii == sence_select.High_sensitivity) {
-            sikii = 40;
-        }
+    export function photo_LR_out(wb: whiteblack, sikii: number): boolean {
         if (phto_R() <= sikii) {
             io_neo.setPixelColor(1, neopixel.colors(NeoPixelColors.Green))
         } else {
