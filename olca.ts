@@ -538,7 +538,7 @@ namespace olca {
     }
 
     //% color="#d4b41f"  weight=26 block="right_photoreflector |%limit_R| small" group="7 photoreflector"
-    //% limit_R.min=0 limit_R.max=100
+    //% limit_R.min=0 limit_R.max=100 limit_R.defl=50
     //% advanced=true
     export function photo_R(limit_R: number): boolean {
         if (phto_R() <= limit_R) {
@@ -560,7 +560,7 @@ namespace olca {
     }
 
     //% color="#d4b41f"  weight=27 block="left_photoreflector |%limit_L| small" group="7 photoreflector"
-    //% limit_L.min=0 limit_L.max=100
+    //% limit_L.min=0 limit_L.max=100 limit_L.defl=50
     //% advanced=true
     export function photo_L(limit_L: number): boolean {
         if (phto_R() <= limit_L) {
