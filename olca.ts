@@ -1,4 +1,4 @@
-/* olca Prgraminng Car Ver0.1 2023/1/1 NaRiKa */
+/* olca Prgraminng Car Ver0.2 2023/3/13 NaRiKa */
 let wait = 0;
 let Tugi_R = 0;
 let Tugi_L = 0;
@@ -60,7 +60,7 @@ else {
 
 
 
-//% color="#3943c6" block="olca Ver0.1" weight=95 icon="\uf1b9"
+//% color="#3943c6" block="olca" weight=95 icon="\uf1b9"
 namespace olca {
 
     export enum pen_updown {
@@ -110,15 +110,6 @@ namespace olca {
         //% block="short",
         short
     }
-    export enum sence_select {
-        //% block="normal30"
-        normal30,
-        //% block="High_sensitivity"
-        High_sensitivity,
-        //% block="Low_sensitivity",
-        Low_sensitivity
-    }
-
 
     export enum onoff {
         //% block="ON"
@@ -286,20 +277,7 @@ namespace olca {
         }
 
     }
-    /*
-        //% color="#ff1493" weight=90 blockId=narika_relay2 block="New_pen |%mode| " group="1 Control Pen"
-        export function car_pen2(mode: pen_updown) {
-            if (mode == pen_updown.up) {
-                pins.servoWritePin(AnalogPin.P8, 80);
-                basic.pause(1000);
-            }
-    
-            if (mode == pen_updown.down) {
-                pins.servoWritePin(AnalogPin.P8, 45);
-                basic.pause(300);
-            }
-        }
-    */
+
     //% color="#3943c6" weight=80 blockId=car_zengo
     //% block="Move |%zengo| |%F_cm| cm" group="2 Basic control"
     export function car_zengo(zengo: car_FB, F_cm: number): void {
@@ -462,7 +440,7 @@ namespace olca {
 
 
 
-    //% color="#009A00" weight=22 blockId=sonar_ping_2 block="Distance sensor" group="6 Ultrasonic_Distance sensor"
+    //% color="#009A00" weight=16 blockId=sonar_ping_2 block="Distance sensor" group="6 Ultrasonic_Distance sensor"
     //% advanced=true
     export function sonar_ping_2(): number {
         let d1 = 0;
@@ -481,8 +459,18 @@ namespace olca {
             d1 = pins.pulseIn(DigitalPin.P0, PulseValue.High, 500 * 58);
             d2 = d2 + d1;
         }
-        return Math.round(Math.idiv(d2 / 5, 58) * 1.5);
+        return Math.round(Math.idiv(d2 / 5, 58) * 1.5 - 2);
     }
+
+    //% color="#009A00"  weight=22 blockId=sonar_value block="show distance sensor value" group="6 Ultrasonic_Distance sensor"
+    //% advanced=true
+    export function sonar_value() {
+        let value = sonar_ping_2()
+        led.enable(true)
+        basic.showNumber(value);
+        led.enable(false)
+    }
+
 
     //% color="#009A00" weight=30 block="(minimam 5cm) dstance |%limit| cm  |%nagasa| " group="6 Ultrasonic_Distance sensor"
     //% limit.min=5 limit.max=30 limit.defl=5
@@ -490,32 +478,20 @@ namespace olca {
     export function sonar_ping_3(limit: number, nagasa: kyori): boolean {
         let d1 = 0;
         let d2 = 0;
-        if (limit < 8) {
-            limit = 8
+        if (limit < 5) {
+            limit = 5
         }
-        for (let i = 0; i < 5; i++) {
-            // send
-            basic.pause(5);
-            pins.setPull(DigitalPin.P2, PinPullMode.PullNone);
-            pins.digitalWritePin(DigitalPin.P2, 0);
-            control.waitMicros(2);
-            pins.digitalWritePin(DigitalPin.P2, 1);
-            control.waitMicros(10);
-            pins.digitalWritePin(DigitalPin.P2, 0);
-            // read
-            d1 = pins.pulseIn(DigitalPin.P0, PulseValue.High, 500 * 58);
-            d2 = d1 + d2;
-        }
+        let value = sonar_ping_2()
         switch (nagasa) {
             case kyori.short:
-                if (Math.idiv(d2 / 5, 58) * 1.5 < limit) {
+                if (value < limit) {
                     return true;
                 } else {
                     return false;
                 }
                 break;
             case kyori.long:
-                if (Math.idiv(d2 / 5, 58) * 1.5 < limit) {
+                if (value < limit) {
                     return false;
                 } else {
                     return true;
@@ -525,28 +501,46 @@ namespace olca {
     }
 
 
-    //% color="#f071bd" weight=30 blockId=auto_photo_R block="right_photoreflector" group="7 photoreflector"
+    //% color="#f071bd" weight=28 blockId=photoR_value block="right_photoreflector" group="7 photoreflector"
     //% advanced=true
-    export function phto_R() {
+    export function photoR_value() {
         return Math.round((pins.analogReadPin(AnalogPin.P10) / 1023) * 100);
     }
 
-    //% color="#f071bd" weight=28 blockId=auto_photo_L block="left_photoreflector" group="7 photoreflector"
+    //% color="#f071bd" weight=30 blockId=photoL_value block="left_photoreflector" group="7 photoreflector"
     //% advanced=true
-    export function phto_L() {
+    export function photoL_value() {
         return Math.round((pins.analogReadPin(AnalogPin.P1) / 1023) * 100);
     }
 
+    //% color="#009A00"  weight=31 blockId=show_photoR block="show right_photoreflector value" group="7 photoreflector"
+    //% advanced=true
+    export function show_photoR() {
+        let value = photoR_value();
+        led.enable(true)
+        basic.showNumber(value);
+        led.enable(false)
+    }
+
+    //% color="#009A00"  weight=32 blockId=show_photoL block="show left_photoreflector value" group="7 photoreflector"
+    //% advanced=true
+    export function show_photoL() {
+        let value = photoL_value();
+        led.enable(true)
+        basic.showNumber(value);
+        led.enable(false)
+    }
+
     //% color="#d4b41f"  weight=26 block="right_photoreflector |%limit_R| small" group="7 photoreflector"
-    //% limit_R.min=0 limit_R.max=100 limit_R.defl=50
+    //% limit_R.min=0 limit_R.max=100 limit_R.defl=45
     //% advanced=true
     export function photo_R(limit_R: number): boolean {
-        if (phto_R() <= limit_R) {
+        if (photoR_value() <= limit_R) {
             io_neo.setPixelColor(1, neopixel.colors(NeoPixelColors.Green))
         } else {
             io_neo.setPixelColor(1, neopixel.colors(NeoPixelColors.Red))
         }
-        if (phto_L() <= limit_R) {
+        if (photoL_value() <= limit_R) {
             io_neo.setPixelColor(0, neopixel.colors(NeoPixelColors.Green))
         } else {
             io_neo.setPixelColor(0, neopixel.colors(NeoPixelColors.Red))
@@ -560,15 +554,15 @@ namespace olca {
     }
 
     //% color="#d4b41f"  weight=27 block="left_photoreflector |%limit_L| small" group="7 photoreflector"
-    //% limit_L.min=0 limit_L.max=100 limit_L.defl=50
+    //% limit_L.min=0 limit_L.max=100 limit_L.defl=45
     //% advanced=true
     export function photo_L(limit_L: number): boolean {
-        if (phto_R() <= limit_L) {
+        if (photoR_value() <= limit_L) {
             io_neo.setPixelColor(1, neopixel.colors(NeoPixelColors.Green))
         } else {
             io_neo.setPixelColor(1, neopixel.colors(NeoPixelColors.Red))
         }
-        if (phto_L() <= limit_L) {
+        if (photoL_value() <= limit_L) {
             io_neo.setPixelColor(0, neopixel.colors(NeoPixelColors.Green))
         } else {
             io_neo.setPixelColor(0, neopixel.colors(NeoPixelColors.Red))
@@ -582,15 +576,15 @@ namespace olca {
     }
 
     //% color="#6041f1"  weight=33 block="only right |%wb| stepping on  |%sikii| " group="7 photoreflector"
-    //% sikii.min=10 sikii.max=90 sikii.defl=50
+    //% sikii.min=10 sikii.max=90 sikii.defl=45
     //% advanced=true
     export function photo_R_out(wb: whiteblack, sikii: number): boolean {
-        if (phto_R() <= sikii) {
+        if (photoR_value() <= sikii) {
             io_neo.setPixelColor(1, neopixel.colors(NeoPixelColors.Green))
         } else {
             io_neo.setPixelColor(1, neopixel.colors(NeoPixelColors.Red))
         }
-        if (phto_L() <= sikii) {
+        if (photoL_value() <= sikii) {
             io_neo.setPixelColor(0, neopixel.colors(NeoPixelColors.Green))
         } else {
             io_neo.setPixelColor(0, neopixel.colors(NeoPixelColors.Red))
@@ -615,15 +609,15 @@ namespace olca {
     }
 
     //% color="#6041f1"  weight=34 block="onle left |%wb| stepping on threshold |%sikii| " group="7 photoreflector" 
-    //% sikii.min=10 sikii.max=90 sikii.defl=50
+    //% sikii.min=10 sikii.max=90 sikii.defl=45
     //% advanced=true
     export function photo_L_out(wb: whiteblack, sikii: number): boolean {
-        if (phto_R() <= sikii) {
+        if (photoR_value() <= sikii) {
             io_neo.setPixelColor(1, neopixel.colors(NeoPixelColors.Green))
         } else {
             io_neo.setPixelColor(1, neopixel.colors(NeoPixelColors.Red))
         }
-        if (phto_L() <= sikii) {
+        if (photoL_value() <= sikii) {
             io_neo.setPixelColor(0, neopixel.colors(NeoPixelColors.Green))
         } else {
             io_neo.setPixelColor(0, neopixel.colors(NeoPixelColors.Red))
@@ -649,15 +643,15 @@ namespace olca {
         }
     }
     //% color="#6041f1"  weight=35 block="Both |%wb| stepping on threshold |%sikii| " group="7 photoreflector"
-    //% sikii.min=10 sikii.max=90 sikii.defl=50
+    //% sikii.min=10 sikii.max=90 sikii.defl=45
     //% advanced=true
     export function photo_LR_out(wb: whiteblack, sikii: number): boolean {
-        if (phto_R() <= sikii) {
+        if (photoR_value() <= sikii) {
             io_neo.setPixelColor(1, neopixel.colors(NeoPixelColors.Green))
         } else {
             io_neo.setPixelColor(1, neopixel.colors(NeoPixelColors.Red))
         }
-        if (phto_L() <= sikii) {
+        if (photoL_value() <= sikii) {
             io_neo.setPixelColor(0, neopixel.colors(NeoPixelColors.Green))
         } else {
             io_neo.setPixelColor(0, neopixel.colors(NeoPixelColors.Red))
@@ -686,11 +680,11 @@ namespace olca {
 
     }
 
-    //% color="#009A00"  weight=19 blockId=microbit2_decideLight block="m:bitOptical sensor value |%limit| Darker" group="8 microbit Optical_sensor"
+    //% color="#009A00"  weight=19 blockId=microbit2_decideLight block="micro:bit Optical sensor value |%limit| Darker" group="8 microbit Optical_sensor"
     //% limit.min=0 limit.max=100 
     //% advanced=true
     export function microbit2_decideLight(limit: number): boolean {
-        if (input.lightLevel() / 254 * 100 < limit) {
+        if (microbit2_denkitemp() < limit) {
             return true;
         } else {
             return false;
@@ -699,21 +693,26 @@ namespace olca {
 
 
 
-    //% color="#009A00"  weight=17 blockId=microbit2_denkitemp block="m:bitOptical sensor value" group="8 microbit Optical_sensor"
+    //% color="#009A00"  weight=16 blockId=microbit2_denkitemp block="micro:bit Optical sensor value" group="8 microbit Optical_sensor"
     //% advanced=true
     export function microbit2_denkitemp(): number {
-
-        return Math.round(input.lightLevel() / 254 * 100);
+        led.enable(true)
+        let value = Math.round(input.lightLevel() / 254 * 100);
+        led.enable(false)
+        return value;
 
     }
 
-    /*
-        //% color="#228b22"  weight=16 blockId=microbit2_denkiLED block="m:bit Optical sensor value" group="9 microbit Optical_sensor"
-        //% advanced=true
-        export function microbit2_denkiLED() {
-            basic.showNumber(Math.round(input.lightLevel() / 254 * 100));
-        }
-    */
+
+    //% color="#009A00"  weight=17 blockId=microbit2_denkiLED block="Show micro:bit Optical sensor value" group="8 microbit Optical_sensor"
+    //% advanced=true
+    export function microbit2_denkiLED() {
+        let value = microbit2_denkitemp()
+        led.enable(true)
+        basic.showNumber(value);
+        led.enable(false)
+    }
+
 
     //% color="#696969" weight=58 blockId=IO_relay block="Relay (digital) write|%mode|" group="9 Relay control"
     //% advanced=true
